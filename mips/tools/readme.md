@@ -66,3 +66,13 @@ mipsel-buildroot-linux-uclibc-gcc-6.4.0          mipsel-buildroot-linux-uclibc-l
 mipsel-buildroot-linux-uclibc-gcc-6.4.0.br_real  mipsel-buildroot-linux-uclibc-ldconfig
 ```
 You can see that we have cross compilers and an instance of gdb. We will use this for crafting our exploits. 
+## gdb-multiarch
+The GNU Debugger for all gdb supported architectures (i386/arm/mips...).
+```console
+$ sudo apt-get install gdb-multiarch
+```
+## radare2
+[radare2](https://github.com/radare/radare2) is a unix-like reverse engineering framework and commandline tools security.
+## IDA
+[IDA](https://www.hex-rays.com/products/ida/) is a Windows, Linux or Mac OS X hosted multi-processor disassembler and debugger.
+
