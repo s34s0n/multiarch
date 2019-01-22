@@ -18,14 +18,22 @@ Now you're going to type make menuconfig and when it's done you're going to see 
 ```console
 $ make menuconfig
 ```
-<img>
+
+![wire](https://github.com/s34s0n/multiarch/blob/master/mips/images/1.png)
+
 Under Target you're going to select MIPS little endian, ELF, and mips32.
-<img>
+
+![wire](https://github.com/s34s0n/multiarch/blob/master/mips/images/2.png)
+
 Under Toolkit you'll want to set the C Library to uClibc since the binary is compiled with this library and most devices you'll come across will be using this C library.
 Also under Toolkit you'll want to enable "Build cross gdb for the host." This will create a gdb binary that will run on your host but will support your target Architecture (e.g. MIPS). This is helpful for debugging applications when using the -g argument in Qemu.
-<img>
+
+![wire](https://github.com/s34s0n/multiarch/blob/master/mips/images/3.png)
+
 Make sure to save your configuration changes so that your toolkit will compile for the right Architecture we've chosen.
-<img>
+
+![wire](https://github.com/s34s0n/multiarch/blob/master/mips/images/4.png)
+
 Now feel free to either explore what other options the toolkit can provide or exit the menu and type "make" but be warned that this process does take a while and also make sure you have an internet connection since this process will download tar files that are needed for compiling.
 
 ```console
