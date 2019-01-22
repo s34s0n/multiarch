@@ -8,7 +8,7 @@ $ sudo apt-get install qemu-user-static
 ## Binwalk
 Once you have qemu-user-static installed you'll next want to install [Binwalk](https://github.com/ReFirmLabs/binwalk). Make sure to follow instructions so you have all the dependancies.
 ## Buildroot
-Buildroot is a simple, efficient and easy-to-use tool to generate embedded Linux systems through cross-compilation.Once Binwalk is installed you will also want to download the uClibc Buildroot tar file. This is crucial since this is going to be your bread and butter for cross compiling and also debugging, especially if you don't have IDA. To get started do the following:
+Buildroot is a simple, efficient and easy-to-use tool to generate embedded Linux systems through cross-compilation.Once Binwalk is installed you will also want to download the uClibc **Buildroot** tar file. This is crucial since this is going to be your bread and butter for cross compiling and also debugging, especially if you don't have IDA. To get started do the following:
 ```console
 $ wget https://buildroot.org/downloads/buildroot-20xx.xx.x.tar.gz
 $ tar xzf buildroot-20xx.xx.x.tar.gz
@@ -39,7 +39,7 @@ Now feel free to either explore what other options the toolkit can provide or ex
 ```console
 $ make
 ```
-Once the toolkit has finished compiling you'll see a new folder called output. This is where the toolkit compiled, but we'll only care about what's been compiled into the host folder within output.
+Once the toolkit has finished compiling you'll see a new folder called **output**. This is where the toolkit compiled, but we'll only care about what's been compiled into the host folder within output.
 ```console
 ➜  buildroot-2018.02.9 ls
 arch   boot   CHANGES    Config.in.legacy  COPYING     dl    fs     Makefile         output   README   system     utils
