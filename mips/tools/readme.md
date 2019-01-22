@@ -25,7 +25,7 @@ Under Target you're going to select MIPS little endian, ELF, and mips32.
 
 ![wire](https://github.com/s34s0n/multiarch/blob/master/mips/images/2.png)
 
-Under Toolkit you'll want to set the C Library to uClibc since the binary is compiled with this library and most devices you'll come across will be using this C library.
+Under Toolkit you'll want to set the C Library to uClibc since the binary is compiled with this library and most devices you'll come across will be using this C library.<br/>
 Also under Toolkit you'll want to enable "Build cross gdb for the host." This will create a gdb binary that will run on your host but will support your target Architecture (e.g. MIPS). This is helpful for debugging applications when using the -g argument in Qemu.
 
 ![wire](https://github.com/s34s0n/multiarch/blob/master/mips/images/3.png)
