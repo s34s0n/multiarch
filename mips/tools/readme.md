@@ -22,7 +22,6 @@ $ make menuconfig
 Under Target you're going to select MIPS little endian, ELF, and mips32.
 <img>
 Under Toolkit you'll want to set the C Library to uClibc since the binary is compiled with this library and most devices you'll come across will be using this C library.
-<img>
 Also under Toolkit you'll want to enable "Build cross gdb for the host." This will create a gdb binary that will run on your host but will support your target Architecture (e.g. MIPS). This is helpful for debugging applications when using the -g argument in Qemu.
 <img>
 Make sure to save your configuration changes so that your toolkit will compile for the right Architecture we've chosen.
