@@ -75,4 +75,6 @@ $ sudo apt-get install gdb-multiarch
 [radare2](https://github.com/radare/radare2) is a unix-like reverse engineering framework and commandline tools security.
 ## IDA
 [IDA](https://www.hex-rays.com/products/ida/) is a Windows, Linux or Mac OS X hosted multi-processor disassembler and debugger.
+## firmadyne
+[firmadyne](https://github.com/firmadyne/firmadyne) is a system for emulation and dynamic analysis of Linux-based firmware.
 
