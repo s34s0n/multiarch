@@ -129,7 +129,7 @@ For an inconditional jump to a particular statement we can use the `j` instructi
  j target
 ```
 <br/>
-We can also jump to the address contained in a register using the instruction `jr`
+We can also jump to the address contained in a register using the instruction `jr`<br/>
 ```
  jr $t0
 ```
@@ -146,4 +146,4 @@ For returing back we can use the instruction `jr` with the argument as `$ra` thu
 ```
  jr $ra
 ```
-For the full instruction list refer this [link][https://www2.cs.duke.edu/courses/fall13/compsci250/MIPS32_QRC.pdf]
+For the full instruction list refer this [link](https://www2.cs.duke.edu/courses/fall13/compsci250/MIPS32_QRC.pdf)
