@@ -146,4 +146,8 @@ For returing back we can use the instruction `jr` with the argument as `$ra` thu
 ```
  jr $ra
 ```
+<<<<<<< HEAD
 For the full instruction list refer this [link](https://www2.cs.duke.edu/courses/fall13/compsci250/MIPS32_QRC.pdf)
+=======
+For the full instruction list refer this [link] [https://www2.cs.duke.edu/courses/fall13/compsci250/MIPS32_QRC.pdf]
+>>>>>>> 3ab6224a6f0104a0444a6b1bc740ca7fa5c1aceb
