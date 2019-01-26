@@ -28,18 +28,18 @@ There are two unnumbered registers `Hi` and `Lo` which are used to store the res
 #### Addressing
 There are two types of addressing Load(Takes data from RAM) and Store(Stores data to Ram):<br/>
 **Load address( la )** :- Used for loading an address into a register
-```nasm
+```
  la $t0,addr
 ```
 The above instruction will copy the address into register $t0<br/>
 
 **Load Word( lw )** :- Used to load a value into a register
-```nasm
+```
  lw $t1,($t0)
 ```
 The above instruction will load the 'word' from the address stored in t0 to the register t1<br/>
 
-```nasm
+```
  lw $t1,k($t0)
 ```
 The above instruction will load the 'word' value from the address `($t0+k)` where **k** is the offset and its value is an integer<br/>
@@ -48,7 +48,7 @@ This method of addressing can be used for:
 - To easily access elemnts from stack pointer and frame pointer
 
 **Store Word ( sw )**:- Used to store a value into the memory
-```nasm 
+``` 
  sw $t2,($t0)
 ```
 The above instruction will store the 'word' value in the register `t2` is stored in the memory on the address in `t0`<br/>
@@ -62,7 +62,7 @@ The instruction for signed addition is `and` and for unsigned addition is `addu`
  add $t0,$t1,$t2 
  addu $t0,$t1,$t2
 ```
-The above instruction adds the values in registers $t1 and $t2 then stores the result in $t0. The first instruction does signed 2's compliment addition while the second instruction does unsigned addition <br/>
+The above instruction adds the values in registers $t1 and $t2 then stores the result in $t0. The first instruction does signed 2's compliment addition while the second instruction does unsigned addition. <br/>
 The equivalent statement is `t0 = t1 + t2`<br/>
 To add an immediate value we use the command `addi` instruction
 ```
@@ -84,15 +84,16 @@ The command for multiplication is `mult`
 ```
 The above statement multiplies the two 32-bit values in `$t1` and `$t2` and stores the 64-bit result in `Hi` and `Lo`, `Hi` contains Most significant bits of the result and `Lo` contains the least significant bits of the result
 
-**Division**
+**Division**:-<br/>
 The command used for division is `div`:
 ```
  div $t1,$t2
 ```
 The above statement stores the quotient in `Lo` register and remainder in `Hi` register<br/>
-Lo = t1/t2<br/>
-Hi = t1%t2<br/>
-
+```
+ Lo = t1/t2
+ Hi = t1%t2
+```
 **Move Operations**:- <br/>
 To move the value of a register to another we can use the `move` instruction
 ```
@@ -105,3 +106,43 @@ To access the registers `Hi` and `Lo` we can use the instructions `mfhi` and `mf
  mflo $t1        # Moves the value in register Lo to $t1 : t1 = Lo
 ```
 
+## Control Structure
+### Branches
+You can unconditionally branch to a target label by using the instruction `b`
+```
+ b target
+```
+The above statement will branch to the program label `target`.<br/>
+There is also conditional branching which can be used to jump to a target label given a condition
+```
+ beq	$t0,$t1,target	  #  branch to target if  $t0 = $t1
+ blt	$t0,$t1,target	  #  branch to target if  $t0 < $t1
+ ble	$t0,$t1,target	  #  branch to target if  $t0 <= $t1
+ bgt	$t0,$t1,target	  #  branch to target if  $t0 > $t1
+ bge	$t0,$t1,target	  #  branch to target if  $t0 >= $t1
+ bne	$t0,$t1,target	  #  branch to target if  $t0 <> $t1
+```
+
+### Jumps
+For an inconditional jump to a particular statement we can use the `j` instruction
+```
+ j target
+```
+<br/>
+We can also jump to the address contained in a register using the instruction `jr`
+```
+ jr $t0
+```
+
+#### Function 
+For a function call we can use the instruction `jal` which is the 'jump and link' instruction
+```
+ jal label
+```
+When the above instruction is executed, the following things happen:
+- The program counter is copied to the `$ra` 
+- Jump to the target label
+For returing back we can use the instruction `jr` with the argument as `$ra` thus returning to the instruction after the function call
+```
+ jr $ra
+```
