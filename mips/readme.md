@@ -12,7 +12,8 @@ qemu-system-mips -M malta \
             -initrd initrd.img-4.9.0-8-4kc-malta \
             -append "root=/dev/sda1 console=ttyS0 nokaslr" \
             -nographic \
-            -nic user,hostfwd=tcp::5555-:22
+            -nic user,hostfwd=tcp::5555-:22 # Use this option for (QEMU version > 2.6.0) else -redir tcp:5555::22
+            
 `
 
 You can then ssh via your host machine using.
