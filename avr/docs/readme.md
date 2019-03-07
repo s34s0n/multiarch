@@ -1,5 +1,5 @@
 # AVR Architecture Overview
-The AVR architecture is a modified Harvard architecture 8-bit RISC architecture.
+The AVR architecture is a modified Harvard architecture. Were looking into the 8-bit RISC avr architecture. This architecture is mainly used in microcontrollers.
 ## Registers
 There are a total of 31 registers in AVR `r1-r31` and from there registers the registers `r26-r31` are 16-bit address pointers for indirect addressing. The three indirect address registers X, Y, and Z are defined as described in the figure.
 - `r1-r25` general purpose 8-bit registers
@@ -36,7 +36,7 @@ ldi r16,f0
 - `lds` - Load Direct from data space
 	- This instruction can be used to load a value from a particular address in the memory to a register
 ```
-lds r17,ff00
+lds r17,0xff00
 ```
 
 #### Storing into the memory
@@ -52,7 +52,15 @@ std Z+k,r3                              # Load r4 with data in the addr stored i
 - `sts` - Store Direct to data space
 	- This instruction can be used to store a value in a register to a particular address in the memory
 ```
-sts ff00,r20
+sts 0xff00,r20
+```
+
+### Input/Output
+Since this architecture is manly used in microcontrollers the inputs and outputs are through ports, timers, physical pins etc.
+We use the `in` instruction for input and `out` instruction for output
+```
+in r25,0x16
+out 0x3f,r1
 ```
 
 ### Arithemetic operations
@@ -64,5 +72,17 @@ The instruction for addition without carry is `add` and for addition with carry 
  adc r3,r4
 ```
 The `adc` command adds the two registers and also adds the carry from the previous instruction.<br/>
-There is also the add immediate word `adiw` instruction that can be used to a "word" value to a register
+There is also the add immediate word `adiw` instruction that can be used to a "word" value to a register.
 
+**Subtraction**:-<br/>
+The instruction for subtraction without carry is `sub` and for subtraction with carry we use the `sbc` instruction
+```
+sub r1,r2
+sbc r3,r4
+```
+For immediate subtraction there is the `sbci` which is thw subtract immediate with carry and `sbiw` which is subtract immediate from word
+
+### Bitwise instructions
+The basic logical instructions in avr are:
+- **** :-<br/>
+This instruction does a bitwise and of the operands an stores it in the first operand. The instruction used is `and` foe

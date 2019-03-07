@@ -129,7 +129,7 @@ For an inconditional jump to a particular statement we can use the `j` instructi
  j target
 ```
 <br/>
-We can also jump to the address contained in a register using the instruction `jr`:
+We can also jump to the address contained in a register using the instruction `jr`
 ```
  jr $t0
 ```
