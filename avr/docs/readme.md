@@ -55,6 +55,12 @@ std Z+k,r3                              # Load r4 with data in the addr stored i
 sts 0xff00,r20
 ```
 
+#### Data Transfer between registers
+We can use the `mov` instruction to copy the value in one register to another 
+```
+mov r0,r1
+```
+
 ### Input/Output
 Since this architecture is manly used in microcontrollers the inputs and outputs are through ports, timers, physical pins etc.
 We use the `in` instruction for input and `out` instruction for output
@@ -84,5 +90,69 @@ For immediate subtraction there is the `sbci` which is thw subtract immediate wi
 
 ### Bitwise instructions
 The basic logical instructions in avr are:
-- **** :-<br/>
-This instruction does a bitwise and of the operands an stores it in the first operand. The instruction used is `and` foe
+- **Bitwise AND**:-<br/>
+The instruction used is `and` for bitwise **and** for the values `andi` for bitwise **and** of a register with an immediate value. This instruction does a bitwise **and** of the operands an stores it in the first operand.  
+```
+and r1,r2
+andi r2,0x34
+```
+- **Bitwise OR**:-<br/>
+The instruction used is `or` for bitwise **or** for the values `ori` for bitwise **or** of a register with an immediate value. This instruction does a bitwise **or** of the operands an stores it in the first operand. 
+```
+and r1,r2
+andi r2,0x34
+```
+- **Bitwise XOR**:-<br/>
+The instruction used for performing bitwise **XOR** is `eor`. This instruction does a bitwise xoring of the two operands and stores it in the first operand.
+
+## Control Structure
+### Unconditional Jumps
+For an unconditional jump to a particular instruction we can use the `jmp` instruction
+```
+jmp k              
+```
+This instruction moves the value of k into the program counter
+
+There is also relative jump `rjmp` to jump relative to the current value of program counter
+```
+rjmp k             ; pc <- pc + k + 1
+```
+
+### Conditional Branching
+The Program execution can branch according to a particular condition based on the compare statements `cp`, `cpc`(Compare with carry), `cpi`(Compare immediate) 
+```
+cp r0,r1
+cpc r2,r3
+cpi r4,k
+```   
+This statement subtracts the second operand from the first operand and sets the necessary flags.<br/>
+The branch statements work according to the values in the flags
+```
+breq k			; if Z = 1 then pc <- pc + k + 1
+brne k 			; if Z = 0 then pc <- pc + k + 1
+brcs k 			; if C = 1 then pc <- pc + k + 1
+brcc k 			; if C = 0 then pc <- pc + k + 1
+brge k 			; if S = 0 then pc <- pc + k + 1
+brlt k 			; if S = 1 then pc <- pc + k + 1
+brmi k 			; if N = 1 then pc <- pc + k + 1
+brpl k 			; if N = 0 then pc <- pc + k + 1
+```
+
+The flag registers are:
+- C : Carry flag
+- Z : Zero flag
+- N : Negative flag
+- V : Two's Compliment Overflow Flag
+- S : Sign Flag , S = N ^ V
+- H : Half Carry Flag
+- T : Copy Storage
+- I : Global Interrupt Enable
+
+###Subroutine Call
+You can call a subroutine using the `call` instruction. The current value of program counter will be pushed to the stack and the program counter will be modified.
+```
+call k 			; push pc and pc <- k
+```
+To return to the calling function we can use the `ret ` statement
+
+For the full instruction list refer this [link](http://www.avr-tutorials.com/sites/default/files/Instruction%20Set%20Summary.pdf)
