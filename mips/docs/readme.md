@@ -51,13 +51,13 @@ This method of addressing can be used for:
 ``` 
  sw $t2,($t0)
 ```
-The above instruction will store the 'word' value in the register `t2` is stored in the memory on the address in `t0`<br/>
+The above instruction will store the 'word' value in the register `t2` to the memory on the address in `t0`<br/>
 Offsets can be used in this instruction as well..
 
 #### Arithemetic operations
 Most of the arithemetic operations require 3 operands and operand size is word(4 bytes)<br/>
 **Addition**:-<br/>
-The instruction for signed addition is `and` and for unsigned addition is `addu`:
+The instruction for signed addition is `add` and for unsigned addition is `addu`:
 ```
  add $t0,$t1,$t2 
  addu $t0,$t1,$t2
