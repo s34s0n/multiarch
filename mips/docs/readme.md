@@ -1,11 +1,12 @@
 # MIPS Architecture Overview
 ## Basics
-We are Dealing with 32-bit Mips architecture so all instructions are 32 bits.<br/>
+We are Dealing with 32-bit MIPS architecture, so all instructions are 32 bits.<br/>
 ### Registers
 There are 32 general purpose registers.<br/>
 These registers can be represented in two ways:
 - Using the register number (**$0 - $31**)
 - Using the corresponding register name ( `$v0`, `$gp` and so on )
+
 The main registers are:
 ```
  $zer0     - A register that holds the value zero
@@ -26,7 +27,7 @@ There are two unnumbered registers `Hi` and `Lo` which are used to store the res
 
 ### Instructions
 #### Addressing
-There are two types of addressing Load(Takes data from RAM) and Store(Stores data to Ram):<br/>
+There are two types of addressing Load(Takes data from RAM) and Store(Stores data to RAM):<br/>
 **Load address( la )** :- Used for loading an address into a register
 ```
  la $t0,addr
@@ -57,7 +58,7 @@ Offsets can be used in this instruction as well..
 #### Arithemetic operations
 Most of the arithemetic operations require 3 operands and operand size is word(4 bytes)<br/>
 **Addition**:-<br/>
-The instruction for signed addition is `and` and for unsigned addition is `addu`:
+The instruction for signed addition is `add` and for unsigned addition is `addu`:
 ```
  add $t0,$t1,$t2 
  addu $t0,$t1,$t2
@@ -146,5 +147,5 @@ For returing back we can use the instruction `jr` with the argument as `$ra` thu
 ```
  jr $ra
 ```
-For the full instruction list refer this [link](https://www2.cs.duke.edu/courses/fall13/compsci250/MIPS32_QRC.pdf)
+For the full instruction list refer [this.](https://www2.cs.duke.edu/courses/fall13/compsci250/MIPS32_QRC.pdf)
 
